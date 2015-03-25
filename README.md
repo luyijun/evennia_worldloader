@@ -5,7 +5,9 @@ You need to install Evennia and create your game first. Evennia's wiki is here: 
 Then, copy folder ```worldloader``` to your game folder, and copy folder ```worldloader/worlddata``` to your game folder too. The directory should look like
 
 ----- worlddata
+
   |
+
   --- worldloader
 
 Add these at the end of the settings file:
@@ -46,6 +48,7 @@ There are three new commands:
 
 In ```worlddata/world_settings.py```, you can set ```CSV_DATA_FOLDER``` to your CSV files' folder.
 
+
 The CSV files (except ```world_details.csv```) have these fields:
 ```
 key,name,alias,typeclass,desc,lock,attributes,location,destination
@@ -54,6 +57,8 @@ key,name,alias,typeclass,desc,lock,attributes,location,destination
 These values will set to object's relative property. Data in ```attributes``` field should be in form of Python's dict. All other fields will be set to object's attributes too.
 
 Objects in ```world_rooms.csv, world_exits.csv, world_objects.csv``` are unique. Every record should has one and only one object in the world.
+
 Objects in ```personal_objects.csv``` are not unique, a record can has zero or multiple objects.
+
 The ```world_details.csv``` is used to set object's detail only.
 
