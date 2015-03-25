@@ -37,8 +37,23 @@ The ```at_cmdset_creation``` should look like this:
 ```
 
 There are three new commands:
+
 1. ```@importcsv``` It can load data from CSV files to game db. CSV files' path is in ```/worlddata/world_settings.py```'s ```CSV_DATA_FOLDER```.
 
 2. ```@datainfo``` It can set an object's data info in game directly.
 
 3. ```@batchbuild``` It can setup the whole game world with data in CSV files.
+
+In ```worlddata/world_settings.py```, you can set ```CSV_DATA_FOLDER``` to your CSV files' folder.
+
+The CSV files (except ```world_details.csv```) have these fields:
+```
+key,name,alias,typeclass,desc,lock,attributes,location,destination
+```
+
+These values will set to object's relative property. Data in ```attributes``` field should be in form of Python's dict. All other fields will be set to object's attributes too.
+
+Objects in ```world_rooms.csv, world_exits.csv, world_objects.csv``` are unique. Every record should has one and only one object in the world.
+Objects in ```personal_objects.csv``` are not unique, a record can has zero or multiple objects.
+The ```world_details.csv``` is used to set object's detail only.
+
