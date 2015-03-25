@@ -4,11 +4,19 @@ You need to install Evennia and create your game first. Evennia's wiki is here: 
 
 Then, copy folder ```worldloader``` to your game folder, and copy folder ```worldloader/worlddata``` to your game folder too. The directory should look like
 
------ worlddata
-
+```
+game
   |
-
-  --- worldloader
+  ----- commands  
+    |
+    --- server
+    |
+    --- ...
+    |
+    --- worlddata
+    |
+    --- worldloader
+```
 
 Add these at the end of the settings file:
 ```
@@ -16,7 +24,7 @@ from worlddata import world_settings
 INSTALLED_APPS = INSTALLED_APPS + (world_settings.WORLD_DATA_APP,)
 ```
   
-Add these to ```CharacterCmdSet```'s ```at_cmdset_creation``` in ```<game folder>/command/default_cmdsets.py```:
+Add these to ```CharacterCmdSet```'s ```at_cmdset_creation``` in ```<game folder>/commands/default_cmdsets.py```:
 ```
         self.add(worldloader.command.CmdImportCsv())
         self.add(worldloader.command.CmdBatchBuilder())
@@ -56,7 +64,7 @@ key,name,alias,typeclass,desc,lock,attributes,location,destination
 
 These values will set to object's relative property. Data in ```attributes``` field should be in form of Python's dict. All other fields will be set to object's attributes too.
 
-Objects in ```world_rooms.csv, world_exits.csv, world_objects.csv``` are unique. Every record should has one and only one object in the world.
+Objects in ```world_rooms.csv```, ```world_exits.csv```, ```world_objects.csv``` are unique. Every record should has one and only one object in the world.
 
 Objects in ```personal_objects.csv``` are not unique, a record can has zero or multiple objects.
 
