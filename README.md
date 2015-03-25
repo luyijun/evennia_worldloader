@@ -1,5 +1,7 @@
+# Intro
 It is a tool for Evennia(github.com/evennia/evennia) which can load game world from csv files.
 
+## Installation
 You need to install Evennia and create your game first. Evennia's wiki is here: github.com/evennia/evennia/wiki.
 
 Then, copy folder ```worldloader``` to your game folder, and copy folder ```worldloader/worlddata``` to your game folder too. The directory should look like
@@ -57,6 +59,7 @@ There are three new commands:
 In ```worlddata/world_settings.py```, you can set ```CSV_DATA_FOLDER``` to your CSV files' folder.
 
 
+## CSV data files
 The CSV files (except ```world_details.csv```) have these fields:
 ```
 key,name,alias,typeclass,desc,lock,attributes,location,destination
@@ -70,3 +73,24 @@ Objects in ```personal_objects.csv``` are not unique, a record can has zero or m
 
 The ```world_details.csv``` is used to set object's detail only.
 
+
+## Install tutorial world
+The tutorial world is from Evennia's tutorial world. To install it, you should set ```CSV_DATA_FOLDER``` in ```worlddata/world_settings.py``` to
+```
+CSV_DATA_FOLDER = "worlddata/tutorial_world"
+```
+
+Then run Evennia and login.
+
+As a builder in game, you should move yourself to Limbo and input:
+```
+@datainfo #2=.limbo
+```
+(This adds a unique key to Limbo.)
+
+Then input:
+```
+@batchbld
+```
+
+If everything is OK, the tutorial should be build.
