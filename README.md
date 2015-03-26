@@ -4,7 +4,7 @@ It is a tool for Evennia(github.com/evennia/evennia) which can load game world f
 ## Installation
 You need to install Evennia and create your game first. Evennia's wiki is here: github.com/evennia/evennia/wiki.
 
-Then, copy folder ```worldloader``` to your game folder, and copy folder ```worldloader/worlddata``` to your game folder too. The directory should look like
+Then, copy folder ```worldloader``` and ```worlddata``` to your game folder. The directory should look like
 
 ```
 game
@@ -30,6 +30,10 @@ Run "evennia migrate".
   
 Add these to ```CharacterCmdSet```'s ```at_cmdset_creation``` in ```<game folder>/commands/default_cmdsets.py```:
 ```
+import worldloader.command
+```
+
+```
         self.add(worldloader.command.CmdImportCsv())
         self.add(worldloader.command.CmdBatchBuilder())
         self.add(worldloader.command.CmdSetDataInfo())
@@ -37,6 +41,17 @@ Add these to ```CharacterCmdSet```'s ```at_cmdset_creation``` in ```<game folder
 
 The ```at_cmdset_creation``` should look like this:
 ```
+from evennia import default_cmds
+import worldloader.command
+
+class CharacterCmdSet(default_cmds.CharacterCmdSet):
+    """
+    The `CharacterCmdSet` contains general in-game commands like `look`,
+    `get`, etc available on in-game Character objects. It is merged with
+    the `PlayerCmdSet` when a Player puppets a Character.
+    """
+    key = "DefaultCharacter"
+
     def at_cmdset_creation(self):
         """
         Populates the cmdset
@@ -45,6 +60,7 @@ The ```at_cmdset_creation``` should look like this:
         #
         # any commands you add below will overload the default ones.
         #
+
         self.add(worldloader.command.CmdImportCsv())
         self.add(worldloader.command.CmdBatchBuilder())
         self.add(worldloader.command.CmdSetDataInfo())
@@ -75,14 +91,13 @@ Objects in ```personal_objects.csv``` are not unique, a record can has zero or m
 
 The ```world_details.csv``` is used to set object's detail only.
 
+The values in ```key``` field should be unique in the whole world. The worldloader uses these keys to identify objects, ```location``` and ```destination``` fields also use these keys.
+
 
 ## Install tutorial world
-The tutorial world is from Evennia's tutorial world. To install it, you should set ```CSV_DATA_FOLDER``` in ```worlddata/world_settings.py``` to
-```
-CSV_DATA_FOLDER = "worlddata/tutorial_world"
-```
+The tutorial world is from Evennia's tutorial world.
 
-Then run Evennia and login.
+Run Evennia and login.
 
 As a builder in game, you should move yourself to Limbo and input:
 ```
@@ -96,3 +111,10 @@ Then input:
 ```
 
 If everything is OK, the tutorial should be build.
+
+
+## Use another world
+If you want to build another world, you can set ```CSV_DATA_FOLDER``` in ```worlddata/world_settings.py``` to your world data folder.
+```
+CSV_DATA_FOLDER = "worlddata/your_world"
+```
