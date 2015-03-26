@@ -17,7 +17,7 @@ from worlddata import world_settings
 DATA_INFO_CATEGORY = "data_info"
 
 
-def import_csv(filename, appname, modelname):
+def import_csv(filename, appname, model_name):
     """
     Import data from a csv file to the db model
     """
@@ -27,7 +27,7 @@ def import_csv(filename, appname, modelname):
         reader = csv.reader(csvfile)
         
         # get model
-        model_obj = get_model(appname, modelname)
+        model_obj = get_model(appname, model_name)
         
         # clear old data
         model_obj.objects.all().delete()
@@ -54,19 +54,21 @@ def import_csv(filename, appname, modelname):
                 field = model_obj._meta.get_field(field_name)
 
                 if isinstance(field, models.ForeignKey):
+                    # foreign key
                     type = 1
                     related_field = field.related_field
                 elif isinstance(field, models.ManyToManyField):
+                    # many to many
                     type = 2
                 else:
+                    # normal field
                     type = 0
             except Exception, e:
                 logger.log_errmsg("Field error: %s" % e)
-                pass
 
             types.append(type)
             related_fields.append(related_field)
-        
+
         # import values
         # read next line
         values = reader.next()

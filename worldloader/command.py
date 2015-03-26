@@ -12,7 +12,7 @@ from loader import import_csv, set_obj_data_info
 from builder import build_all
 from evennia import Command as BaseCommand
 from evennia import default_cmds
-from evennia.utils import create, utils, search
+from evennia.utils import create, utils, search, logger
 from worlddata import world_settings
 
 
@@ -169,23 +169,26 @@ class CmdImportCsv(MuxCommand):
             models = world_settings.WORLD_DATA
 
         # import models one by one
-        for modelname in models:
+        for model_names in models:
             # can only import models in world_settings.WORLD_DATA
-            if not modelname in world_settings.WORLD_DATA:
+            if not model_names in world_settings.WORLD_DATA:
                 caller.msg("%s is not in world_settings.WORLD_DATA, cannot import." % modelname)
                 continue
 
-            # make filename
-            filename = os.path.join(world_settings.CSV_DATA_PATH, modelname + ".csv")
-            
-            # import data
-            try:
-                import_csv(filename, appname, modelname)
-                caller.msg("%s imported." % modelname)
-                count += 1
-            except Exception, e:
-                print e
-                continue
+            for model_name in model_names:
+                # make filename
+                filename = os.path.join(world_settings.CSV_DATA_PATH, model_name + ".csv")
+                print filename
+                
+                # import data
+                try:
+                    import_csv(filename, appname, model_name)
+                    caller.msg("%s imported." % model_name)
+                    count += 1
+                except Exception, e:
+                    logger.log_errmsg("Can not import %s, error: %s" % (model_name, e))
+                    caller.msg("Can not import %s." % model_name)
+                    continue
 
         caller.msg("total %d files imported." % count)
 

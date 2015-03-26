@@ -25,6 +25,8 @@ Add these at the end of the settings file:
 from worlddata import world_settings
 INSTALLED_APPS = INSTALLED_APPS + (world_settings.WORLD_DATA_APP,)
 ```
+
+Run "evennia migrate".
   
 Add these to ```CharacterCmdSet```'s ```at_cmdset_creation``` in ```<game folder>/commands/default_cmdsets.py```:
 ```
