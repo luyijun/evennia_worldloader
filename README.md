@@ -1,6 +1,7 @@
 # Intro
 It is a tool for Evennia(github.com/evennia/evennia) which can load game world from csv files.
 
+
 ## Installation
 You need to install Evennia and create your game first. Evennia's wiki is here: github.com/evennia/evennia/wiki.
 
@@ -20,7 +21,7 @@ game
     --- worldloader
 ```
 
-Add these at the end of the settings file:
+Add these at the end of the ```/server/conf/settings.py```:
 ```
 from worlddata import world_settings
 INSTALLED_APPS = INSTALLED_APPS + (world_settings.WORLD_DATA_APP,)
@@ -28,10 +29,12 @@ INSTALLED_APPS = INSTALLED_APPS + (world_settings.WORLD_DATA_APP,)
 
 Run "evennia migrate".
   
-Add these to ```CharacterCmdSet```'s ```at_cmdset_creation``` in ```<game folder>/commands/default_cmdsets.py```:
+Add these to ```CharacterCmdSet```'s beginning:
 ```
 import worldloader.command
 ```
+
+Add these to ```CharacterCmdSet```'s ```at_cmdset_creation``` in ```<game folder>/commands/default_cmdsets.py```:
 
 ```
         self.add(worldloader.command.CmdImportCsv())
@@ -77,6 +80,7 @@ There are three new commands:
 In ```worlddata/world_settings.py```, you can set ```CSV_DATA_FOLDER``` to your CSV files' folder.
 
 
+
 ## CSV data files
 The CSV files (except ```world_details.csv```) have these fields:
 ```
@@ -92,6 +96,7 @@ Objects in ```personal_objects.csv``` are not unique, a record can has zero or m
 The ```world_details.csv``` is used to set object's detail only.
 
 The values in ```key``` field should be unique in the whole world. The worldloader uses these keys to identify objects, ```location``` and ```destination``` fields also use these keys.
+
 
 
 ## Install tutorial world
@@ -113,8 +118,11 @@ Then input:
 If everything is OK, the tutorial should be build.
 
 
+
 ## Use another world
-If you want to build another world, you can set ```CSV_DATA_FOLDER``` in ```worlddata/world_settings.py``` to your world data folder.
+If you want to use another world, you can set ```CSV_DATA_FOLDER``` in ```worlddata/world_settings.py``` to your world data folder.
 ```
 CSV_DATA_FOLDER = "worlddata/your_world"
 ```
+
+Then run ```@batchbld``` in your game.
