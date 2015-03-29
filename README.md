@@ -10,7 +10,7 @@ Then get the source codes.
 git clone https://github.com/luyijun/evennia_worldloader.git
 ```
 
-Copy folder ```worldloader``` and ```worlddata``` to your game folder. The directory should look like
+Copy folder ```worldloader``` to your game folder, then copy folder ```worldloader/example_tutorial_world/worlddata``` to your game folder. The directory should look like
 
 ```
 game
@@ -111,7 +111,7 @@ Run Evennia and login.
 
 As a builder in game, you should move yourself to Limbo and input:
 ```
-@datainfo #2=.limbo
+@datainfo #2=limbo
 ```
 (This adds a unique key to Limbo.)
 
