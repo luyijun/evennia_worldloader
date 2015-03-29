@@ -12,7 +12,7 @@ from loader import import_csv, set_obj_data_info
 from builder import build_all
 from evennia import Command as BaseCommand
 from evennia import default_cmds
-from evennia.utils import create, utils, search, logger
+from evennia.utils import create, utils, search
 from worlddata import world_settings
 
 
@@ -157,10 +157,10 @@ class CmdImportCsv(MuxCommand):
         # count the number of files loaded
         count = 0
         
-        # get appname
-        appname = world_settings.WORLD_DATA_APP
+        # get app_name
+        app_name = world_settings.WORLD_DATA_APP
         
-        # get modelname, can specify the model name in args
+        # get model_name, can specify the model name in args
         # if no args is given, load all models in settings.WORLD_DATA
         models = self.args
         if models:
@@ -169,26 +169,23 @@ class CmdImportCsv(MuxCommand):
             models = world_settings.WORLD_DATA
 
         # import models one by one
-        for model_names in models:
+        for model_name in models:
             # can only import models in world_settings.WORLD_DATA
-            if not model_names in world_settings.WORLD_DATA:
-                caller.msg("%s is not in world_settings.WORLD_DATA, cannot import." % modelname)
+            if not model_name in world_settings.WORLD_DATA:
+                caller.msg("%s is not in world_settings.WORLD_DATA, cannot import." % model_name)
                 continue
 
-            for model_name in model_names:
-                # make filename
-                filename = os.path.join(world_settings.CSV_DATA_PATH, model_name + ".csv")
-                print filename
-                
-                # import data
-                try:
-                    import_csv(filename, appname, model_name)
-                    caller.msg("%s imported." % model_name)
-                    count += 1
-                except Exception, e:
-                    logger.log_errmsg("Can not import %s, error: %s" % (model_name, e))
-                    caller.msg("Can not import %s." % model_name)
-                    continue
+            # make file name
+            file_name = os.path.join(world_settings.CSV_DATA_PATH, model_name + ".csv")
+            
+            # import data
+            try:
+                import_csv(file_name, app_name, model_name)
+                caller.msg("%s imported." % model_name)
+                count += 1
+            except Exception, e:
+                print e
+                continue
 
         caller.msg("total %d files imported." % count)
 
@@ -199,7 +196,7 @@ class CmdImportCsv(MuxCommand):
 class CmdSetDataInfo(MuxCommand):
     """
     Usage:
-    @datainfo <obj>[=<db>.<key>]
+    @datainfo <obj>[=<key>]
     
     This will try to set the type id of an object.
     If you want to add a key without db, you can use: @datainfo <obj>[=.<key>]
@@ -214,46 +211,48 @@ class CmdSetDataInfo(MuxCommand):
         """
         caller = self.caller
         if not self.args:
-            string = "Usage: @datainfo <obj>[=<db>.<key>]"
+            string = "Usage: @datainfo <obj>[=<key>]"
             caller.msg(string)
             return
         
         if not self.rhs:
             if self.args == self.lhs:
                 # no "="
-                objname = self.args
-                obj = caller.search(objname, location=caller.location)
+                obj_name = self.args
+                obj = caller.search(obj_name, location=caller.location)
                 if not obj:
-                    caller.msg("Sorry, can not find %s." % objname)
+                    caller.msg("Sorry, can not find %s." % obj_name)
                 elif obj.db.info_db and obj.db.info_key:
-                    caller.msg("%s's datainfo is %s" % (objname, obj.db.info_db + "." + obj.db.info_key))
+                    caller.msg("%s's datainfo is %s" % (obj_name, obj.db.info_db + "." + obj.db.info_key))
                 else:
-                    caller.msg("%s has no datainfo." % objname)
+                    caller.msg("%s has no datainfo." % obj_name)
                 return
-            else:
-                callser.msg("Must input <db>.<key>.")
 
-        objname = self.lhs
-        obj = caller.search(objname, location=caller.location)
+        obj_name = self.lhs
+        obj = caller.search(obj_name, location=caller.location)
         if not obj:
-            caller.msg("Sorry, can not find %s." % objname)
-            return
-        
-        pattern = re.compile(r"^\w*\.\w*$", re.I)
-        if not pattern.match(self.rhs):
-            caller.msg("Datainfo must be <db>.<key>.")
+            caller.msg("Sorry, can not find %s." % obj_name)
             return
 
-        # set the model and key:
-        args = self.rhs.split(".")
-        modelname = args[0]
-        keyname = args[1]
+        # set the key:
+        key_name = self.rhs
+        model_name = ""
+        app_name = ""
+        
+        if key_name:
+            for model in world_settings.WORLD_DATA:
+                model_obj = get_model(app_name, model)
+                if model_obj:
+                    if model_obj.objects.filter(key=key_name):
+                        model_name = model
+                        app_name = world_settings.WORLD_DATA_APP
+                        break
 
         try:
-            set_obj_data_info(obj, modelname, keyname)
-            caller.msg("%s's datainfo has been set to %s" % (objname, self.rhs))
+            set_obj_data_info(obj, app_name, model_name, keyname)
+            caller.msg("%s's datainfo has been set to %s" % (obj_name, self.rhs))
         except:
-            caller.msg("Can't set datainfo %s to %s" % (self.rhs, objname))
+            caller.msg("Can't set datainfo %s to %s" % (self.rhs, obj_name))
 
 
 #------------------------------------------------------------

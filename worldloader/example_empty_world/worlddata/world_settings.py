@@ -16,7 +16,7 @@ WORLD_DATA_APP = "worlddata"
 WORLD_MODEL_PATH = os.path.join(settings.GAME_DIR, WORLD_DATA_APP)
 
 # csv files' folder under user's game directory.
-CSV_DATA_FOLDER = "worlddata/tutorial_world"
+CSV_DATA_FOLDER = "worlddata/csv"
 
 # csv files' full path
 CSV_DATA_PATH = os.path.join(settings.GAME_DIR, CSV_DATA_FOLDER)
@@ -36,10 +36,11 @@ WORLD_DETAILS = ("world_details",)
 # normal objects
 PERSONAL_OBJECTS = ("personal_objects",)
 
-WORLD_DATA = (WORLD_ROOMS,
-              WORLD_EXITS,
-              WORLD_OBJECTS,
-              WORLD_DETAILS,
-              PERSONAL_OBJECTS)
+WORLD_DATA = ()
+WORLD_DATA += WORLD_ROOMS
+WORLD_DATA += WORLD_EXITS
+WORLD_DATA += WORLD_OBJECTS
+WORLD_DATA += WORLD_DETAILS
+WORLD_DATA += PERSONAL_OBJECTS
 
 BASE_AUTOOBJ_TYPECLASS = "worldloader.objects.AutoObj"

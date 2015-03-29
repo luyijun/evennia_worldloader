@@ -1,4 +1,4 @@
-key,name,alias,typeclass,home,desc,lock,attributes,tutorial_info
+key,name,alias,typeclass,location,desc,lock,attributes,tutorial_info
 obj_tut_01,Old well,well,,room_tut_03," The ruins of an old well sit some way off the path. The stone circle
  has collapsed and whereas there is still a chain hanging down the
  hole, it does not look very secure. It is probably a remnant of some

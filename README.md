@@ -1,11 +1,16 @@
 # Intro
-It is a tool for Evennia(github.com/evennia/evennia) which can load game world from csv files.
+It is a tool for Evennia(http://github.com/evennia/evennia) which can load game world from CSV files.
 
 
 ## Installation
-You need to install Evennia and create your game first. Evennia's wiki is here: github.com/evennia/evennia/wiki.
+You need to install Evennia and create your game first. Evennia's wiki is here: http://github.com/evennia/evennia/wiki.
 
-Then, copy folder ```worldloader``` and ```worlddata``` to your game folder. The directory should look like
+Then get the source codes.
+```
+git clone https://github.com/luyijun/evennia_worldloader.git
+```
+
+Copy folder ```worldloader``` and ```worlddata``` to your game folder. The directory should look like
 
 ```
 game
@@ -27,7 +32,7 @@ from worlddata import world_settings
 INSTALLED_APPS = INSTALLED_APPS + (world_settings.WORLD_DATA_APP,)
 ```
 
-Run "evennia migrate".
+Run ```evennia migrate```.
   
 Add these to ```CharacterCmdSet```'s beginning:
 ```

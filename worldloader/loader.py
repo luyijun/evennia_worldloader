@@ -11,23 +11,22 @@ from django.db import models
 from django.db.models.loading import get_model
 from django.conf import settings
 from evennia.utils import create, utils, search, logger
-from worlddata import world_settings
 
 
 DATA_INFO_CATEGORY = "data_info"
 
 
-def import_csv(filename, appname, model_name):
+def import_csv(file_name, app_name, model_name):
     """
     Import data from a csv file to the db model
     """
     try:
         # load file
-        csvfile = open(filename, 'r')
+        csvfile = open(file_name, 'r')
         reader = csv.reader(csvfile)
         
         # get model
-        model_obj = get_model(appname, model_name)
+        model_obj = get_model(app_name, model_name)
         
         # clear old data
         model_obj.objects.all().delete()
@@ -54,21 +53,19 @@ def import_csv(filename, appname, model_name):
                 field = model_obj._meta.get_field(field_name)
 
                 if isinstance(field, models.ForeignKey):
-                    # foreign key
                     type = 1
                     related_field = field.related_field
                 elif isinstance(field, models.ManyToManyField):
-                    # many to many
                     type = 2
                 else:
-                    # normal field
                     type = 0
             except Exception, e:
                 logger.log_errmsg("Field error: %s" % e)
+                pass
 
             types.append(type)
             related_fields.append(related_field)
-
+        
         # import values
         # read next line
         values = reader.next()
@@ -110,12 +107,13 @@ def import_csv(filename, appname, model_name):
 #
 ################################################################
 
-def set_obj_data_info(obj, model, key):
+def set_obj_data_info(obj, app, model, key):
     """
     Set data_info's database. It saves info to attributes of data_info category, then load these data.
     """
-    obj.attributes.add("key", key, category=DATA_INFO_CATEGORY, strattr=True)
+    obj.attributes.add("app", app, category=DATA_INFO_CATEGORY, strattr=True)
     obj.attributes.add("model", model, category=DATA_INFO_CATEGORY, strattr=True)
+    obj.attributes.add("key", key, category=DATA_INFO_CATEGORY, strattr=True)
     return load_data(obj)
 
 
@@ -126,17 +124,21 @@ def load_data(obj):
     if not obj:
         return
 
-    # Get key and model.
-    key = obj.attributes.get(key="key", category=DATA_INFO_CATEGORY, strattr=True)
-    if not key:
+    # Get app, model and key names.
+    app = obj.attributes.get(key="app", category=DATA_INFO_CATEGORY, strattr=True)
+    if not app:
         return False
-    
+
     model = obj.attributes.get(key="model", category=DATA_INFO_CATEGORY, strattr=True)
     if not model:
         return False
 
+    key = obj.attributes.get(key="key", category=DATA_INFO_CATEGORY, strattr=True)
+    if not key:
+        return False
+
     # Get db model
-    model_obj = get_model(world_settings.WORLD_DATA_APP, model)
+    model_obj = get_model(app, model)
     if not model_obj:
         logger.log_errmsg("%s can not open model %s" % (key, model))
         return False
@@ -149,14 +151,22 @@ def load_data(obj):
 
     info = data_info[0]
 
-    set_obj_typeclass(obj, info.typeclass)
-    set_obj_name(obj, info.name)
-    set_obj_alias(obj, info.alias)
-    set_obj_location(obj, info.location)
-    set_obj_home(obj, info.home)
-    set_obj_desc(obj, info.desc)
-    set_obj_lock(obj, info.lock)
-    set_obj_destination(obj, info.destination)
+    if info.typeclass:
+        set_obj_typeclass(obj, info.typeclass)
+    if info.name:
+        set_obj_name(obj, info.name)
+    if info.alias:
+        set_obj_alias(obj, info.alias)
+    if info.location:
+        set_obj_location(obj, info.location)
+    if info.home:
+        set_obj_home(obj, info.home)
+    if info.desc:
+        set_obj_desc(obj, info.desc)
+    if info.lock:
+        set_obj_lock(obj, info.lock)
+    if info.destination:
+        set_obj_destination(obj, info.destination)
 
     # Set attributes.
     attributes = {}

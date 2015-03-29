@@ -1,5 +1,5 @@
 """
-Add these at the end of the settings file:
+Add this at the end of the settings file like this:
 
 from worlddata import world_settings
 INSTALLED_APPS = INSTALLED_APPS + (world_settings.WORLD_DATA_APP,)
@@ -36,10 +36,11 @@ WORLD_DETAILS = ("world_details",)
 # normal objects
 PERSONAL_OBJECTS = ("personal_objects",)
 
-WORLD_DATA = (WORLD_ROOMS,
-              WORLD_EXITS,
-              WORLD_OBJECTS,
-              WORLD_DETAILS,
-              PERSONAL_OBJECTS)
+WORLD_DATA = ()
+WORLD_DATA += WORLD_ROOMS
+WORLD_DATA += WORLD_EXITS
+WORLD_DATA += WORLD_OBJECTS
+WORLD_DATA += WORLD_DETAILS
+WORLD_DATA += PERSONAL_OBJECTS
 
 BASE_AUTOOBJ_TYPECLASS = "worldloader.objects.AutoObj"
