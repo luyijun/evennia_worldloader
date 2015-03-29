@@ -8,6 +8,7 @@ Commands describe the input the player can do to the game.
 import os
 import re
 from django.conf import settings
+from django.db.models.loading import get_model
 from loader import import_csv, set_obj_data_info
 from builder import build_all
 from evennia import Command as BaseCommand
@@ -241,7 +242,7 @@ class CmdSetDataInfo(MuxCommand):
         
         if key_name:
             for model in world_settings.WORLD_DATA:
-                model_obj = get_model(app_name, model)
+                model_obj = get_model(world_settings.WORLD_DATA_APP, model)
                 if model_obj:
                     if model_obj.objects.filter(key=key_name):
                         model_name = model
@@ -249,10 +250,10 @@ class CmdSetDataInfo(MuxCommand):
                         break
 
         try:
-            set_obj_data_info(obj, app_name, model_name, keyname)
+            set_obj_data_info(obj, app_name, model_name, key_name)
             caller.msg("%s's datainfo has been set to %s" % (obj_name, self.rhs))
-        except:
-            caller.msg("Can't set datainfo %s to %s" % (self.rhs, obj_name))
+        except Exception, e:
+            caller.msg("Can't set datainfo %s to %s: %s" % (self.rhs, obj_name, e))
 
 
 #------------------------------------------------------------

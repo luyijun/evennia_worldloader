@@ -114,6 +114,10 @@ def set_obj_data_info(obj, app, model, key):
     obj.attributes.add("app", app, category=DATA_INFO_CATEGORY, strattr=True)
     obj.attributes.add("model", model, category=DATA_INFO_CATEGORY, strattr=True)
     obj.attributes.add("key", key, category=DATA_INFO_CATEGORY, strattr=True)
+    
+    if (not app) or (not model) or (not key):
+        return True
+
     return load_data(obj)
 
 
