@@ -1,8 +1,5 @@
 """
-Commands
-
-Commands describe the input the player can do to the game.
-
+This module handles loading data from csv files and set data to objects.
 """
 
 import csv
@@ -19,6 +16,11 @@ DATA_INFO_CATEGORY = "data_info"
 def import_csv(file_name, app_name, model_name):
     """
     Import data from a csv file to the db model
+    
+    Args:
+        file_name: (string) CSV file's name.
+        app_name: (string) Db app's name.
+        model_name: (string) Db model's name.
     """
     try:
         # load file
@@ -110,6 +112,12 @@ def import_csv(file_name, app_name, model_name):
 def set_obj_data_info(obj, app, model, key):
     """
     Set data_info's database. It saves info to attributes of data_info category, then load these data.
+    
+    Args:
+        obj: Object in game.
+        app: (string) Db app's name.
+        model: (string) Db model's name.
+        key: (string) Key of the data info.
     """
     obj.attributes.add("app", app, category=DATA_INFO_CATEGORY, strattr=True)
     obj.attributes.add("model", model, category=DATA_INFO_CATEGORY, strattr=True)
@@ -124,6 +132,9 @@ def set_obj_data_info(obj, app, model, key):
 def load_data(obj):
     """
     Load object data from db, and set them to the obj."
+    
+    Args:
+        obj: Object in game.
     """
     if not obj:
         return
@@ -207,6 +218,10 @@ def load_data(obj):
 def set_obj_typeclass(obj, typeclass):
     """
     Set object's typeclass.
+    
+    Args:
+        obj: Object in game.
+        typeclass: (string) Typeclass's name.
     """
     if not obj:
         return
@@ -229,6 +244,10 @@ def set_obj_typeclass(obj, typeclass):
 def set_obj_name(obj, name):
     """
     Set object's name.
+    
+    Args:
+        obj: Object in game.
+        name: (string) Name of the object.
     """
     if name == obj.name:
         # No change.
@@ -249,6 +268,10 @@ def set_obj_name(obj, name):
 def set_obj_alias(obj, aliases):
     """
     Set object's alias.
+    
+    Args:
+        obj: Object in game.
+        aliases: (string) Aliases of the object.
     """
     # merge the old and new aliases (if any)
     new_aliases = [alias.strip().lower() for alias in aliases.split(';')
@@ -277,6 +300,10 @@ def set_obj_alias(obj, aliases):
 def set_obj_location(obj, location):
     """
     Set object's location.
+    
+    Args:
+        obj: Object in game.
+        location: (string) Location's name. Must be the key of data info.
     """
     location_obj = None
     
@@ -307,6 +334,10 @@ def set_obj_location(obj, location):
 def set_obj_home(obj, home):
     """
     Set object's home.
+    
+    Args:
+        obj: Object in game.
+        home: (string) Home's name. Must be the key of data info.
     """
     home_obj = None
     
@@ -336,6 +367,10 @@ def set_obj_home(obj, home):
 def set_obj_desc(obj, desc):
     """
     Set object's description.
+    
+    Args:
+        obj: Object in game.
+        desc: (string) Description.
     """
     obj.db.desc = desc
 
@@ -344,6 +379,10 @@ def set_obj_desc(obj, desc):
 def set_obj_lock(obj, lock):
     """
     Set object's lock.
+    
+    Args:
+        obj: Object in game.
+        lock: (string) Object's lock string.
     """
     if lock:
         try:
@@ -357,7 +396,9 @@ def set_obj_attributes(obj, attributes):
     """
     Set object's attribute.
     
-    attributes: (dict) Object's attribues."
+    Args:
+        obj: Object in game.
+        attributes: (dict) Object's attribues."
     """
     if not attributes:
         return
@@ -374,6 +415,10 @@ def set_obj_attributes(obj, attributes):
 def set_obj_destination(obj, destination):
     """
     Set object's destination
+    
+    Args:
+        obj: Object in game.
+        destination: (string) Destination's name. Must be the key of data info.
     """
     destination_obj = None
 
@@ -403,6 +448,11 @@ def set_obj_destination(obj, destination):
 def set_obj_detail(obj, key, detail):
     """
     Set object's detail.
+    
+    Args:
+        obj: Object in game.
+        key: (string) Detail's key.
+        detail: (string) Detail's info.
     """
     if hasattr(obj, "set_detail"):
         obj.set_detail(key, detail)
@@ -410,7 +460,10 @@ def set_obj_detail(obj, key, detail):
         
 def get_info_key(obj):
     """
-    Get object's data info key.
+    Get an object's data info key.
+    
+    Args:
+        obj: Object in game.
     """
     return obj.attributes.get(key="key", category=DATA_INFO_CATEGORY, strattr=True)
 
@@ -418,6 +471,9 @@ def get_info_key(obj):
 def search_obj_info_key(key):
     """
     Search objects which have the given key.
+    
+    Args:
+        key: (string) Data info key.
     """
     obj = search.search_object_attribute(key="key", strvalue=key, category=DATA_INFO_CATEGORY)
     return obj
@@ -426,6 +482,9 @@ def search_obj_info_key(key):
 def search_obj_info_model(model):
     """
     Search objects which have the given model.
+    
+    Args:
+        model: (string) Data model's name.
     """
     obj = search.search_object_attribute(key="model", strvalue=model, category=DATA_INFO_CATEGORY)
     return obj

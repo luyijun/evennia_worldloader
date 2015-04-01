@@ -1,8 +1,5 @@
 """
-Commands
-
-Commands describe the input the player can do to the game.
-
+This module handles importing data from csv files and creating the whole game world from these data.
 """
 
 import os
@@ -14,9 +11,12 @@ from evennia.utils import create, search, logger
 from worlddata import world_settings
 
 
-def import_all(caller):
+def import_all(caller=None):
     """
-    Import all csv files to db model
+    Import all csv data to db model.
+    
+    Args:
+        caller: (command caller) If provide, running messages will send to the caller.
     """
 
     # count the number of files loaded
@@ -46,14 +46,16 @@ def import_all(caller):
 
 
 
-def build_objects(caller, model_name, unique):
+def build_objects(model_name, unique, caller=None):
     """
     Build objects of a model.
     
-    caller: command caller.
-    model_name: (string) The name of the data model.
-    unique: (boolean) If unique, every record in model should has one and only one object in the world.
-                      If not unique, a record can has zero or multiple objects.
+    Args:
+        model_name: (string) The name of the data model.
+        unique: (boolean) If unique, every record in model should has one and only one
+                          object in the world.
+                          If not unique, a record can has zero or multiple objects.
+        caller: (command caller) If provide, running messages will send to the caller.
     """
     if caller:
         caller.msg("Building %s." % model_name)
@@ -116,14 +118,16 @@ def build_objects(caller, model_name, unique):
         caller.msg(string)
 
 
-def build_details(caller, model_name):
+def build_details(model_name, caller=None):
     """
     Build details of a model.
     
-    caller: command caller.
-    model_name: (string) The name of the data model.
+    Args:
+        model_name: (string) The name of the data model.
+        caller: (command caller) If provide, running messages will send to the caller.
     """
     
+    a = nil
     model_detail = get_model(world_settings.WORLD_DATA_APP, model_name)
     
     # Remove all details
@@ -150,25 +154,28 @@ def build_details(caller, model_name):
         caller.msg(string)
 
 
-def build_all(caller):
+def build_all(caller=None):
     """
     Load csv data and build the world.
+    
+    Args:
+        caller: (command caller) If provide, running messages will send to the caller.
     """
     import_all(caller)
 
     for room in world_settings.WORLD_ROOMS:
-        build_objects(caller, room, True)
+        build_objects(room, True, caller)
 
     for exit in world_settings.WORLD_EXITS:
-        build_objects(caller, exit, True)
+        build_objects(exit, True, caller)
 
     for object in world_settings.WORLD_OBJECTS:
-        build_objects(caller, object, True)
+        build_objects(object, True, caller)
 
     for object in world_settings.PERSONAL_OBJECTS:
-        build_objects(caller, object, False)
+        build_objects(object, False, caller)
 
     for detail in world_settings.WORLD_DETAILS:
-        build_details(caller, detail)
+        build_details(detail, caller)
 
 

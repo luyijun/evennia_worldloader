@@ -1,7 +1,7 @@
 """
 Commands
 
-Commands describe the input the player can do to the game.
+Add three commands: @importcsv, @datainfo and @batchbuilder
 
 """
 
@@ -144,6 +144,9 @@ class CmdImportCsv(MuxCommand):
     """
     Usage:
       @importcsv
+      
+      <modelname> must be in world_settings.CSV_DATA.
+      If <modelname> is empty, it will import all csv files in world_settings.CSV_DATA.
     """
     key = "@importcsv"
     locks = "perm(Builders)"
@@ -199,8 +202,8 @@ class CmdSetDataInfo(MuxCommand):
     Usage:
     @datainfo <obj>[=<key>]
     
-    This will try to set the type id of an object.
-    If you want to add a key without db, you can use: @datainfo <obj>[=.<key>]
+    This will set the data key to an object.
+    @datainfo <obj> will show the data key of the object.
     """
     key = "@datainfo"
     locks = "perm(Builders)"
@@ -263,6 +266,8 @@ class CmdBatchBuilder(MuxCommand):
     """
     Usage:
       @batchbuilder
+      
+    Build the whole game world with data in CSV files.
     """
     key = "@batchbuilder"
     aliases = ["@batchbld"]
