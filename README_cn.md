@@ -36,21 +36,21 @@ INSTALLED_APPS = INSTALLED_APPS + (world_settings.WORLD_DATA_APP,)
   
 将以下内容添加到```/commands/default_cmdsets.py```的开头:
 ```
-import worldloader.command
+import worldloader.command as loadercmd
 ```
 
 将以下内容添加到```/commands/default_cmdsets.py```的```CharacterCmdSet```的 ```at_cmdset_creation```中：
 
 ```
-        self.add(worldloader.command.CmdImportCsv())
-        self.add(worldloader.command.CmdBatchBuilder())
-        self.add(worldloader.command.CmdSetDataInfo())
+        self.add(loadercmd.CmdImportCsv())
+        self.add(loadercmd.CmdBatchBuilder())
+        self.add(loadercmd.CmdSetDataInfo())
 ```
 
 ```/commands/default_cmdsets.py```看上去应该像这样：
 ```
 from evennia import default_cmds
-import worldloader.command
+import worldloader.command as loadercmd
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
     """
@@ -69,9 +69,9 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
         # any commands you add below will overload the default ones.
         #
 
-        self.add(worldloader.command.CmdImportCsv())
-        self.add(worldloader.command.CmdBatchBuilder())
-        self.add(worldloader.command.CmdSetDataInfo())
+        self.add(loadercmd.CmdImportCsv())
+        self.add(loadercmd.CmdBatchBuilder())
+        self.add(loadercmd.CmdSetDataInfo())
 ```
 
 这添加了三个新命令：

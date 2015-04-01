@@ -36,21 +36,21 @@ Run ```evennia migrate```.
   
 Add these to ```/commands/default_cmdsets.py```'s beginning:
 ```
-import worldloader.command
+import worldloader.command as loadercmd
 ```
 
 Add these to ```CharacterCmdSet```'s ```at_cmdset_creation``` in ```/commands/default_cmdsets.py```:
 
 ```
-        self.add(worldloader.command.CmdImportCsv())
-        self.add(worldloader.command.CmdBatchBuilder())
-        self.add(worldloader.command.CmdSetDataInfo())
+        self.add(loadercmd.CmdImportCsv())
+        self.add(loadercmd.CmdBatchBuilder())
+        self.add(loadercmd.CmdSetDataInfo())
 ```
 
 The ```/commands/default_cmdsets.py``` should look like this:
 ```
 from evennia import default_cmds
-import worldloader.command
+import worldloader.command as loadercmd
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
     """
@@ -69,9 +69,9 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
         # any commands you add below will overload the default ones.
         #
 
-        self.add(worldloader.command.CmdImportCsv())
-        self.add(worldloader.command.CmdBatchBuilder())
-        self.add(worldloader.command.CmdSetDataInfo())
+        self.add(loadercmd.CmdImportCsv())
+        self.add(loadercmd.CmdBatchBuilder())
+        self.add(loadercmd.CmdSetDataInfo())
 ```
 
 There are three new commands:
