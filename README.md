@@ -34,12 +34,12 @@ INSTALLED_APPS = INSTALLED_APPS + (world_settings.WORLD_DATA_APP,)
 
 Run ```evennia migrate```.
   
-Add these to ```CharacterCmdSet```'s beginning:
+Add these to ```/commands/default_cmdsets.py```'s beginning:
 ```
 import worldloader.command
 ```
 
-Add these to ```CharacterCmdSet```'s ```at_cmdset_creation``` in ```<game folder>/commands/default_cmdsets.py```:
+Add these to ```CharacterCmdSet```'s ```at_cmdset_creation``` in ```/commands/default_cmdsets.py```:
 
 ```
         self.add(worldloader.command.CmdImportCsv())
@@ -47,7 +47,7 @@ Add these to ```CharacterCmdSet```'s ```at_cmdset_creation``` in ```<game folder
         self.add(worldloader.command.CmdSetDataInfo())
 ```
 
-The ```at_cmdset_creation``` should look like this:
+The ```/commands/default_cmdsets.py``` should look like this:
 ```
 from evennia import default_cmds
 import worldloader.command
@@ -76,7 +76,7 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
 
 There are three new commands:
 
-1. ```@importcsv``` It can load data from CSV files to game db. CSV files' path is in ```/worlddata/world_settings.py```'s ```CSV_DATA_FOLDER```.
+1. ```@importcsv``` It can load data from CSV files to game db. CSV files' path is defined in ```/worlddata/world_settings.py```'s ```CSV_DATA_FOLDER```.
 
 2. ```@datainfo``` It can set an object's data info in game directly.
 
@@ -92,7 +92,7 @@ The CSV files (except ```world_details.csv```) have these fields:
 key,name,alias,typeclass,desc,lock,attributes,location,destination
 ```
 
-These values will set to object's relative property. Data in ```attributes``` field should be in form of Python's dict. All other fields will be set to object's attributes too.
+These values will set to object's relative property. Data in ```attributes``` field should be in form of Python's dict. All other fields except above ones will be set to object's attributes too.
 
 Objects in ```world_rooms.csv```, ```world_exits.csv```, ```world_objects.csv``` are unique. Every record should has one and only one object in the world.
 
